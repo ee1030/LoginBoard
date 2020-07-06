@@ -1,29 +1,34 @@
 package com.example.LoginBoard.controller;
 
+import com.example.LoginBoard.domain.entity.MemberEntity;
+import com.example.LoginBoard.domain.repository.MemberRepository;
 import com.example.LoginBoard.dto.BoardDto;
 import com.example.LoginBoard.dto.MemberDto;
 import com.example.LoginBoard.service.BoardService;
 import com.example.LoginBoard.service.MemberService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
 public class MemberController {
     private BoardService boardService;
     private MemberService memberService;
+    private MemberRepository memberRepository;
 
     //메인 페이지
     @GetMapping("/")
     public String index(Model model)
     {
         List<BoardDto> boardList = boardService.getBoardList();
-
         model.addAttribute("boardList", boardList);
         return "/index";
     }
@@ -68,7 +73,13 @@ public class MemberController {
 
     // 내 정보 페이지
     @GetMapping("/user/info")
-    public String dispMyInfo() {
+    public String dispMyInfo(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails)principal;
+        Optional<MemberEntity> loginUserWrapper = memberRepository.findByEmail(userDetails.getUsername());
+        MemberEntity loginUser = loginUserWrapper.orElse(null);
+
+        model.addAttribute("loginUser",loginUser);
         return "/myinfo";
     }
 

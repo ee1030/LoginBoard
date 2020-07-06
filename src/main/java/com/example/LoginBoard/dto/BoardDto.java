@@ -4,16 +4,15 @@ import com.example.LoginBoard.domain.entity.Board;
 import com.example.LoginBoard.domain.entity.MemberEntity;
 import com.example.LoginBoard.domain.repository.MemberRepository;
 import lombok.*;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardDto {
+    private MemberRepository memberRepository;
 
     private Long id;
     private String writer;
@@ -22,6 +21,7 @@ public class BoardDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private Long memberEntityId;
+    private MemberEntity loginMemberEntity;
 
     public Board toEntity() {
         Board board = Board.builder()
@@ -29,24 +29,21 @@ public class BoardDto {
                 .content(content)
                 .title(title)
                 .writer(writer)
+                .memberEntity(loginMemberEntity)
                 .build();
         return board;
     }
 
-    public String currentMemberName() {
-        MemberDto memberDto = (MemberDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return memberDto.getEmail();
-    } //TODO : 로그인된 유저정보 가져오기
-
     @Builder
-    public BoardDto(Long id, String title, String content,
-                    LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public BoardDto(Long id, String title, String content, String writer,
+                    LocalDateTime createdDate, LocalDateTime modifiedDate, Long memberEntityId) {
         this.id = id;
         this.title = title;
-        this.writer = currentMemberName();
+        this.writer = writer;
         this.content = content;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.memberEntityId = memberEntityId;
     }
 
 }

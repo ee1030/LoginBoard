@@ -12,12 +12,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "board")
 public class Board extends Time{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length =  10, nullable = false)
+    @Column(length =  100, nullable = true)
     private String writer;
 
     @Column(length =  100, nullable = false)

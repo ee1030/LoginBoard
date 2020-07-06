@@ -1,9 +1,14 @@
 package com.example.LoginBoard.service;
 
 import com.example.LoginBoard.domain.entity.Board;
+import com.example.LoginBoard.domain.entity.MemberEntity;
 import com.example.LoginBoard.domain.repository.BoardRepository;
+import com.example.LoginBoard.domain.repository.MemberRepository;
 import com.example.LoginBoard.dto.BoardDto;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class BoardService {
     private BoardRepository boardRepository;
+    private MemberRepository memberRepository;
 
     @Transactional
     public List<BoardDto> getBoardList() {
@@ -25,6 +32,7 @@ public class BoardService {
             BoardDto boardDto = BoardDto.builder()
                     .id(board.getId())
                     .title(board.getTitle())
+                    .writer(board.getWriter())
                     .content(board.getContent())
                     .createdDate(board.getCreatedDate())
                     .build();
@@ -37,6 +45,14 @@ public class BoardService {
 
     @Transactional
     public Long savePost(BoardDto boardDto) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails)principal;
+        Optional<MemberEntity> userWrapper = memberRepository.findByEmail(userDetails.getUsername());
+        MemberEntity userEntity = userWrapper.get();
+
+        boardDto.setWriter(userDetails.getUsername());
+        boardDto.setMemberEntityId(userEntity.getId());
+        boardDto.setLoginMemberEntity(memberRepository.getOne(userEntity.getId()));
         return boardRepository.save(boardDto.toEntity()).getId();
     }
 
@@ -48,6 +64,7 @@ public class BoardService {
         BoardDto boardDto = BoardDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
+                .writer(board.getWriter())
                 .content(board.getContent())
                 .createdDate(board.getCreatedDate())
                 .build();

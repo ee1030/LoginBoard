@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<h2 th:text="${boardDto.title}"></h2>
+<h2> 제목 : <sapn th:text="${boardDto.title}"></sapn></h2>
+<p> 작성자 : <span th:text="${boardDto.writer}"></span></p>
 <p th:inline="text">작성일 : [[${#temporals.format(boardDto.createdDate, 'yyyy-MM-dd HH:mm')}]]</p>
 
 <p th:text="${boardDto.content}"></p>

@@ -8,7 +8,6 @@
 <body>
 <!-- HEADER -->
 <div th:insert="common/header.html" id="header"></div>
-
 <a sec:authorize="isAuthenticated()" th:href="@{/post}">글쓰기</a>
 
 <table>
