@@ -24,14 +24,13 @@ public class BoardDto {
     private MemberEntity loginMemberEntity;
 
     public Board toEntity() {
-        Board board = Board.builder()
+        return Board.builder()
                 .id(id)
                 .content(content)
                 .title(title)
                 .writer(writer)
                 .memberEntity(loginMemberEntity)
                 .build();
-        return board;
     }
 
     @Builder

@@ -8,5 +8,13 @@
     <h1>내 정보 확인 페이지입니다.</h1>
     <hr>
     <p>계정 : <span th:text="${loginUser.email}"></span></p>
+    <hr>
+    <form id="delete-form" th:action="@{/user/info/delete}" method="post">
+        <input type="hidden" name="_method" value="delete"/>
+        <button id="delete-btn">회원탈퇴</button>
+    </form>
+    <a th:href="@{'/'}">
+        <button>메인으로</button>
+    </a>
 </body>
 </html>

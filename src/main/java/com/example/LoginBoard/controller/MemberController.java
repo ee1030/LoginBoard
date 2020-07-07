@@ -1,28 +1,27 @@
 package com.example.LoginBoard.controller;
 
 import com.example.LoginBoard.domain.entity.MemberEntity;
-import com.example.LoginBoard.domain.repository.MemberRepository;
 import com.example.LoginBoard.dto.BoardDto;
 import com.example.LoginBoard.dto.MemberDto;
 import com.example.LoginBoard.service.BoardService;
 import com.example.LoginBoard.service.MemberService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Controller
 @AllArgsConstructor
 public class MemberController {
     private BoardService boardService;
     private MemberService memberService;
-    private MemberRepository memberRepository;
 
     //메인 페이지
     @GetMapping("/")
@@ -35,13 +34,29 @@ public class MemberController {
 
     // 회원가입 페이지
     @GetMapping("/user/signup")
-    public String dispSignup() {
+    public String dispSignup(MemberDto memberDto) {
         return "/signup";
     }
 
     // 회원가입 처리
     @PostMapping("/user/signup")
-    public String execSignup(MemberDto memberDto) {
+    public String execSignup(@Valid MemberDto memberDto, Errors errors, Model model) {
+        if (errors.hasErrors()) {
+            // 회원가입 실패시 입력 테이터 유지
+            model.addAttribute("memberDto", memberDto);
+
+            // 유효성 통과 못한 필드와 메시지를 핸들링
+            Map<String, String> validatorResult = memberService.validateHandling(errors);
+            for(String key : validatorResult.keySet()) {
+                model.addAttribute(key, validatorResult.get(key));
+            }
+
+            return "/signup";
+        }
+
+        if(memberService.checkEmail(memberDto.getEmail())) {
+            return "/emailExisted";
+        }
         memberService.joinUser(memberDto);
 
         return "redirect:/user/login";
@@ -74,18 +89,23 @@ public class MemberController {
     // 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Model model) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails)principal;
-        Optional<MemberEntity> loginUserWrapper = memberRepository.findByEmail(userDetails.getUsername());
-        MemberEntity loginUser = loginUserWrapper.orElse(null);
-
+        MemberEntity loginUser = memberService.getLoginUser();
         model.addAttribute("loginUser",loginUser);
         return "/myinfo";
     }
 
     // 어드민 페이지
     @GetMapping("/admin")
-    public String dispAdmin() {
+    public String dispAdmin(Model model) {
+        MemberEntity loginUser = memberService.getLoginUser();
+        model.addAttribute("loginUser", loginUser);
         return "/admin";
+    }
+
+    @DeleteMapping("/user/info/delete")
+    public String delete() {
+        MemberEntity loginUser = memberService.getLoginUser();
+        memberService.deleteMember(loginUser.getId());
+        return "/deleteSuccess";
     }
 }

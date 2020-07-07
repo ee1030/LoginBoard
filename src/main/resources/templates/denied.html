@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>접근 거부</title>
@@ -7,5 +7,8 @@
 <body>
     <h1>접근 불가 페이지 입니다.</h1>
     <hr>
+    <a th:href="@{'/'}">
+        <button>메인으로</button>
+    </a>
 </body>
 </html>
