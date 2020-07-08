@@ -76,4 +76,9 @@ public class MemberService implements UserDetailsService {
         Optional<MemberEntity> loginUserWrapper = memberRepository.findByEmail(userDetails.getUsername());
         return loginUserWrapper.orElse(null);
     }
+
+    public Boolean isLogin() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal != "anonymousUser";
+    }
 }
