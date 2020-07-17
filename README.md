@@ -51,3 +51,6 @@ LoginBoard는 가장 기본적인 기능인 글쓰기, 조회, 수정, 삭제의
 
 ### Java
 - Validation을 이용한 유효성 검사
+
+
+20.07.17 DB 이슈 해결(MySQL 버전 차이)
