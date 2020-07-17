@@ -3,6 +3,7 @@
 ## 프로젝트 개요
 LoginBoard는 가장 기본적인 기능인 글쓰기, 조회, 수정, 삭제의 CRUD 기능을 가진 게시판에 회원 로그인 기능을 추가한 프로젝트 입니다.
 프로젝트는 SpringBoot + JPA + SpringSecurity + MySQL + Thymeleaf로 구현하였으며, 컨트롤러는 REST API를 이용하여 구현하였습니다.
+이후 AWS의 RDS(MySQL)와 EC2를 이용하여 서비스를 배포하였습니다.
 
 ## 주요 기능
 - 게시글의 조회 및 작성, 수정, 삭제(REST API를 이용하여 CRUD기능 작성)
@@ -51,6 +52,10 @@ LoginBoard는 가장 기본적인 기능인 글쓰기, 조회, 수정, 삭제의
 
 ### Java
 - Validation을 이용한 유효성 검사
+
+### AWS
+- EC2를 이용하여 서비스 배포
+- Amazon RDS를 이용하여 DB 구축
 
 
 20.07.17 DB 이슈 해결(MySQL 버전 차이)
