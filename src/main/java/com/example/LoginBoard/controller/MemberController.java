@@ -26,7 +26,7 @@ public class MemberController {
     // 회원가입 페이지
     @GetMapping("/user/signup")
     public String dispSignup(MemberDto memberDto) {
-        return "/signup";
+        return "signup";
     }
 
     // 회원가입 처리
