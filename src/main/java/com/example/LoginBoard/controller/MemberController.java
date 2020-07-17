@@ -42,11 +42,11 @@ public class MemberController {
                 model.addAttribute(key, validatorResult.get(key));
             }
 
-            return "/signup";
+            return "signup";
         }
 
         if(memberService.checkEmail(memberDto.getEmail())) {
-            return "/emailExisted";
+            return "emailExisted";
         }
         memberService.joinUser(memberDto);
 
@@ -56,25 +56,25 @@ public class MemberController {
     // 로그인 페이지
     @GetMapping("/user/login")
     public String dispLogin() {
-        return "/login";
+        return "login";
     }
 
     // 로그인 결과 페이지
     @GetMapping("/user/login/result")
     public String dispLoginResult() {
-        return "/loginSuccess";
+        return "loginSuccess";
     }
 
     // 로그아웃 결과 페이지
     @GetMapping("/user/logout/result")
     public String dispLogout() {
-        return "/logout";
+        return "logout";
     }
 
     // 접근 거부 페이지
     @GetMapping("/user/denied")
     public String dispDenied() {
-        return "/denied";
+        return "denied";
     }
 
     // 내 정보 페이지
@@ -82,7 +82,7 @@ public class MemberController {
     public String dispMyInfo(Model model) {
         MemberEntity loginUser = memberService.getLoginUser();
         model.addAttribute("loginUser", loginUser);
-        return "/myinfo";
+        return "myinfo";
     }
 
     // 어드민 페이지
@@ -90,14 +90,14 @@ public class MemberController {
     public String dispAdmin(Model model) {
         MemberEntity loginUser = memberService.getLoginUser();
         model.addAttribute("loginUser", loginUser);
-        return "/admin";
+        return "admin";
     }
 
     @DeleteMapping("/user/info/delete")
     public String delete() {
         MemberEntity loginUser = memberService.getLoginUser();
         memberService.deleteMember(loginUser.getId());
-        return "/deleteSuccess";
+        return "deleteSuccess";
     }
 
     @GetMapping("/test")
@@ -105,6 +105,6 @@ public class MemberController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal == "anonymousUser")
         log.info("{}", principal);
-        return "/index";
+        return "index";
     }
 }

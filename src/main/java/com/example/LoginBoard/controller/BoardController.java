@@ -78,7 +78,7 @@ public class BoardController {
 
         model.addAttribute("boardList", boardDtoList);
 
-        return "/index";
+        return "index";
     }
 
     @DeleteMapping("/post/{id}")
