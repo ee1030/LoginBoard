@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://hjyoo-1.cpsrrglqxivn.ap-northeast-2.rds.amazonaws.com:3306/loginboard?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql:172.31.39.206:3306/loginboard?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: Dbdudwo1!!
 
